@@ -1,0 +1,147 @@
+
+application {
+  config {
+    baseName myApp,
+    applicationType monolith,
+    packageName com.myapp,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    clientFramework angular
+  }
+  entities *
+}
+
+entity Staff {
+  staffId UUID required,
+  addressId UUID required,
+  staffCategoryCode UUID required,
+  genderMfu String,
+  staffJobTitle String,
+  staffFirstName String,
+  staffMiddleName String,
+  staffLastName String,
+  staffQualifications String,
+  staffBirthDate String,
+  otherStaffDetails  String
+}
+enum StaffCategoryDescription {
+  DOCTOR, 
+  NURSE
+}
+
+entity RedStaffCategories {
+  staffCategoryCode UUID required,
+  staffCategoryDescription StaffCategoryDescription
+}
+
+entity Addresses {
+  addressId UUID required,
+  line1NumberBuilding String,
+  line2NumberStreet String,
+  line3AreaLocality String,
+  city String,
+  zipPostalCode Integer,
+  stateProvinceCountry String,
+  country String,
+  otherAddressDetails String
+}
+
+entity BloodBanks {
+  bloodBankId UUID required,
+  addressId UUID required,
+  bloodBankDetails String
+}
+
+entity Donors {
+  donorId UUID required,
+  addressId UUID required,
+  bloodBankId UUID required,
+  religionCode UUID required,
+  nationalMedicalNumber Integer,
+  genderMfu String,
+  dateOfBirth LocalDate,
+  firstName String, 
+  middleName String,
+  lastName String,
+  homePhoneNumber Integer,
+  workPhoneNumber Integer,
+  cellMobilePhone Integer,
+  medicalCondition String,
+  otherDetails String
+}
+
+entity DonorsMedications {
+  donorId UUID required,
+  medicationCode UUID required,
+  comments TextBlob,
+}
+
+
+entity Medications {
+  medicationCode UUID required,
+  medicationName String,
+  medicationDescription String,
+  otherDetails String
+}
+
+entity DonorsMedicalConditions {
+  donorId UUID required,
+  conditionCode UUID required,
+  seriousness String,
+}
+entity MedicalConditions {
+  conditionCode UUID required,
+  conditionName String,
+  conditionDescription TextBlob,
+  otherDetails String,
+}
+
+entity Religions {
+  religionCode UUID required,
+  religionName String,
+  religionDescription String,
+  otherDetails String
+}
+
+entity Donations{
+  donationId UUID required,
+  donorId UUID required,
+  donationDate LocalDate,
+  otherDetails String,
+  comments String
+}
+
+relationship OneToMany {
+  RedStaffCategories to Staff
+}
+relationship ManyToOne {
+  Staff to Addresses
+}
+relationship ManyToOne {
+  BloodBanks to Addresses
+}
+relationship OneToMany {
+  Staff to BloodBanks
+}
+relationship ManyToOne{
+ Donors to BloodBanks
+}
+relationship OneToMany {
+  Donors to DonorsMedications
+}
+relationship ManyToOne {
+	DonorsMedications to Medications
+}
+relationship OneToMany {
+	Donors to DonorsMedicalConditions
+}
+relationship ManyToOne {
+	DonorsMedicalConditions to MedicalConditions
+}
+relationship ManyToOne {
+	Donors to Religions
+}
+relationship OneToMany{
+	Donors to Donations
+}
+    
